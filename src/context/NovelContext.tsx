@@ -114,7 +114,7 @@ export const NovelProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       try { 
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Sync any initial novels with current author and chapter updates
+          // Sync any initial novels with current author, genres, ageRating, and chapter updates
           const updatedParsed = parsed.map((n: Novel) => {
             const initialMatch = INITIAL_NOVELS.find(init => init.id === n.id);
             if (initialMatch) {
@@ -124,13 +124,20 @@ export const NovelProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 title: initialMatch.title,
                 synopsis: initialMatch.synopsis,
                 genre: initialMatch.genre,
+                genres: initialMatch.genres || [initialMatch.genre],
+                ageRating: initialMatch.ageRating || '21+',
+                contentWarnings: initialMatch.contentWarnings,
                 tags: initialMatch.tags,
                 chapters: initialMatch.chapters,
                 totalWords: initialMatch.totalWords,
                 rating: initialMatch.rating
               };
             }
-            return n;
+            return {
+              ...n,
+              genres: n.genres || [n.genre],
+              ageRating: n.ageRating || 'Semua Umur'
+            };
           });
           const existingIds = new Set(updatedParsed.map((n: Novel) => n.id));
           const missingInitial = INITIAL_NOVELS.filter(n => !existingIds.has(n.id));

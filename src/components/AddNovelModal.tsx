@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNovel } from '../context/NovelContext';
-import type { Genre, Chapter } from '../types';
-import { BookPlus, Sparkles, X, Upload } from 'lucide-react';
+import type { Genre, Chapter, AgeRating } from '../types';
+import { BookPlus, Sparkles, X, Upload, ShieldAlert } from 'lucide-react';
 
 interface AddNovelModalProps {
   isOpen: boolean;
@@ -13,7 +13,9 @@ export const AddNovelModal: React.FC<AddNovelModalProps> = ({ isOpen, onClose })
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [genre, setGenre] = useState<Genre>('Fantasy');
+  const [genre, setGenre] = useState<Genre>('Thriller');
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(['Thriller', 'Mystery']);
+  const [ageRating, setAgeRating] = useState<AgeRating>('21+');
   const [synopsis, setSynopsis] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
@@ -27,7 +29,24 @@ export const AddNovelModal: React.FC<AddNovelModalProps> = ({ isOpen, onClose })
 
   if (!isOpen) return null;
 
-  const genres: Genre[] = ['Fantasy', 'Romance', 'Mystery', 'Sci-Fi', 'Adventure', 'Historical', 'Drama'];
+  const genres: string[] = [
+    'Thriller', 
+    'Mystery', 
+    'Action', 
+    'Spy & Agent', 
+    'Romance', 
+    'Crime', 
+    'Sci-Fi', 
+    'Fantasy', 
+    'Psychological', 
+    'Drama', 
+    'Adventure', 
+    'Horror', 
+    'Cyberpunk', 
+    'Historical'
+  ];
+
+  const ageRatingOptions: AgeRating[] = ['Semua Umur', '13+', '16+', '18+', '21+'];
 
   const presetCovers = [
     { label: 'Fantasy Kosmik', url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop' },
@@ -127,7 +146,10 @@ export const AddNovelModal: React.FC<AddNovelModalProps> = ({ isOpen, onClose })
     addNewNovel({
       title: title.trim(),
       author: author.trim(),
-      genre,
+      genre: selectedGenres[0] || genre,
+      genres: selectedGenres.length > 0 ? selectedGenres : [genre],
+      ageRating,
+      contentWarnings: ageRating === '21+' ? ['Kekerasan & Aksi Bersenjata', 'Romansa & Sensualitas Dewasa'] : undefined,
       synopsis: synopsis.trim(),
       tags,
       cover: chosenCover,
@@ -223,34 +245,71 @@ export const AddNovelModal: React.FC<AddNovelModalProps> = ({ isOpen, onClose })
             </div>
           </div>
 
-          {/* Genre & Tags */}
+          {/* Age Rating & Tags */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                Genre Utama
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1">
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
+                <span>Rating Usia Pembaca *</span>
               </label>
               <select
-                value={genre}
-                onChange={(e) => setGenre(e.target.value as Genre)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                value={ageRating}
+                onChange={(e) => setAgeRating(e.target.value as AgeRating)}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 font-bold"
               >
-                {genres.map((g) => (
-                  <option key={g} value={g}>{g}</option>
+                {ageRatingOptions.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt === '21+' ? '21+ (Dewasa Khusus / Kekerasan & Romansa)' : opt === '18+' ? '18+ (Dewasa)' : opt}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                Tag Tema (pisahkan koma)
+                Tag Tema Tambahan (pisahkan koma)
               </label>
               <input
                 type="text"
-                placeholder="Fantasi, Aksi, Petualangan"
+                placeholder="The Elite Files, Spy Thriller, Hacker"
                 value={tagsInput}
                 onChange={(e) => setTagsInput(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
               />
+            </div>
+          </div>
+
+          {/* Multi-Genre Selector */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              Pilih Genre (Bisa Lebih Dari 1)
+            </label>
+            <div className="flex flex-wrap gap-1.5 p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 max-h-32 overflow-y-auto">
+              {genres.map((g) => {
+                const isSelected = selectedGenres.includes(g);
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => {
+                      if (isSelected) {
+                        if (selectedGenres.length > 1) {
+                          setSelectedGenres(selectedGenres.filter(item => item !== g));
+                        }
+                      } else {
+                        setSelectedGenres([...selectedGenres, g]);
+                      }
+                    }}
+                    className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all ${
+                      isSelected
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    {isSelected ? '✓ ' : '+ '}{g}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

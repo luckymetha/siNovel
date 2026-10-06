@@ -33,9 +33,28 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('All');
+  const [selectedAgeRating, setSelectedAgeRating] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'rating' | 'popular' | 'chapters' | 'newest'>('popular');
 
-  const genres = ['All', 'Fantasy', 'Romance', 'Mystery', 'Sci-Fi', 'Adventure', 'Drama'];
+  const genres = [
+    'All', 
+    'Thriller', 
+    'Mystery', 
+    'Action', 
+    'Spy & Agent', 
+    'Romance', 
+    'Crime', 
+    'Sci-Fi', 
+    'Fantasy', 
+    'Psychological', 
+    'Drama', 
+    'Adventure', 
+    'Horror', 
+    'Cyberpunk', 
+    'Historical'
+  ];
+
+  const ageRatings = ['All', '21+', '18+', '16+', '13+', 'Semua Umur'];
 
   // Featured novel (if any)
   const featuredNovel = novels.find(n => n.featured) || (novels.length > 0 ? novels[0] : undefined);
@@ -48,8 +67,16 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         if (activeTab === 'favorites' && !novel.isFavorite) return false;
         if (activeTab === 'history' && (!novel.lastReadProgress || novel.lastReadProgress === 0)) return false;
 
-        // Genre filter
-        if (selectedGenre !== 'All' && novel.genre !== selectedGenre) return false;
+        // Genre filter (supports multi-genre)
+        if (selectedGenre !== 'All') {
+          const hasGenre = (novel.genres && novel.genres.includes(selectedGenre)) || novel.genre === selectedGenre;
+          if (!hasGenre) return false;
+        }
+
+        // Age rating filter
+        if (selectedAgeRating !== 'All') {
+          if (novel.ageRating !== selectedAgeRating) return false;
+        }
 
         // Search query
         if (searchQuery.trim()) {
@@ -57,8 +84,9 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
           const matchTitle = novel.title.toLowerCase().includes(q);
           const matchAuthor = novel.author.toLowerCase().includes(q);
           const matchSynopsis = novel.synopsis.toLowerCase().includes(q);
+          const matchGenre = (novel.genres || [novel.genre]).some(g => g.toLowerCase().includes(q));
           const matchTags = novel.tags.some(t => t.toLowerCase().includes(q));
-          if (!matchTitle && !matchAuthor && !matchSynopsis && !matchTags) return false;
+          if (!matchTitle && !matchAuthor && !matchSynopsis && !matchTags && !matchGenre) return false;
         }
 
         return true;
@@ -69,7 +97,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         if (sortBy === 'newest') return b.publishedYear - a.publishedYear;
         return b.reviewsCount - a.reviewsCount; // popular
       });
-  }, [novels, activeTab, selectedGenre, searchQuery, sortBy]);
+  }, [novels, activeTab, selectedGenre, selectedAgeRating, searchQuery, sortBy]);
 
   // Clean Zero Data State when user hasn't added any novel yet
   if (novels.length === 0) {
@@ -190,22 +218,44 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
             </p>
           </div>
 
-          {/* Sort Dropdown */}
-          <div className="flex items-center gap-2 self-end sm:self-auto">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Urutkan:</span>
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="popular">Terpopuler</option>
-              <option value="rating">Rating Tertinggi (★)</option>
-              <option value="chapters">Jumlah Bab Terbanyak</option>
-              <option value="newest">Tahun Terbaru</option>
-            </select>
+          {/* Filters & Sort Controls */}
+          <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
+            {/* Age Rating Dropdown */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Rating:
+              </span>
+              <select
+                value={selectedAgeRating}
+                onChange={(e) => setSelectedAgeRating(e.target.value)}
+                className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="All">Semua Rating Usia</option>
+                <option value="21+">21+ (Dewasa Khusus)</option>
+                <option value="18+">18+ (Dewasa)</option>
+                <option value="16+">16+ (Remaja Lanjut)</option>
+                <option value="13+">13+ (Remaja)</option>
+                <option value="Semua Umur">Semua Umur (SU)</option>
+              </select>
+            </div>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <span>Urutkan:</span>
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="popular">Terpopuler</option>
+                <option value="rating">Rating Tertinggi (★)</option>
+                <option value="chapters">Jumlah Bab Terbanyak</option>
+                <option value="newest">Tahun Terbaru</option>
+              </select>
+            </div>
           </div>
         </div>
 

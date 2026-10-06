@@ -4,7 +4,23 @@
   "author": "PamanKen",
   "synopsis": "Rai Prasetyo, seorang mahasiswa cerdas dan atlet basket berbakat di Bandung, tanpa sengaja meretas enkripsi rahasia \"The Elite Files\"—arsip rahasia transaksi gelap kartel dan dinasti paling berkuasa di dunia. Organisasi rahasia tersebut mengirimkan agen maut terbaik mereka: Arista von Rothschild. Menyamar sebagai mahasiswi polos, Arista ditugaskan memanipulasi, memikat hati Rai, dan mengeksekusinya. Namun ketika jaring asmara palsu berubah menjadi ikatan nyata yang tak terduga, perburuan berdarah lintas benua pun meledak tanpa ampun.",
   "cover": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=800&auto=format&fit=crop",
-  "genre": "Mystery",
+  "genre": "Thriller",
+  "genres": [
+    "Thriller",
+    "Mystery",
+    "Action",
+    "Spy & Agent",
+    "Romance",
+    "Crime",
+    "Psychological"
+  ],
+  "ageRating": "21+",
+  "contentWarnings": [
+    "Kekerasan & Aksi Bersenjata",
+    "Konspirasi & Pembunuhan Terencana",
+    "Romansa & Sensualitas Dewasa",
+    "Intrik Agen Rahasia & Hacker Bawah Tanah"
+  ],
   "tags": [
     "The Elite Files",
     "Spy Thriller",

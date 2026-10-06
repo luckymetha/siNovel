@@ -1,4 +1,24 @@
-export type Genre = 'Fantasy' | 'Romance' | 'Mystery' | 'Sci-Fi' | 'Adventure' | 'Historical' | 'Drama';
+export type AgeRating = 'Semua Umur' | '13+' | '16+' | '18+' | '21+';
+
+export type Genre = 
+  | 'Thriller' 
+  | 'Mystery' 
+  | 'Action' 
+  | 'Spy & Agent' 
+  | 'Romance' 
+  | 'Crime' 
+  | 'Sci-Fi' 
+  | 'Fantasy' 
+  | 'Psychological' 
+  | 'Drama' 
+  | 'Adventure' 
+  | 'Horror' 
+  | 'Cyberpunk' 
+  | 'Historical' 
+  | 'Comedy' 
+  | 'Supernatural' 
+  | 'Slice of Life' 
+  | string;
 
 export interface Chapter {
   id: string;
@@ -14,7 +34,10 @@ export interface Novel {
   author: string;
   synopsis: string;
   cover: string;
-  genre: Genre;
+  genre: Genre; // Primary genre
+  genres: Genre[]; // Multi-genre support
+  ageRating: AgeRating; // '21+', '18+', '16+', '13+', 'Semua Umur'
+  contentWarnings?: string[]; // e.g. ['Kekerasan', 'Konspirasi Gelap', 'Sensual']
   tags: string[];
   rating: number;
   reviewsCount: number;

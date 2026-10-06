@@ -7,7 +7,8 @@ import {
   Headphones, 
   Heart, 
   Layers, 
-  Clock 
+  Clock,
+  ShieldAlert
 } from 'lucide-react';
 
 interface NovelCardProps {
@@ -21,16 +22,38 @@ export const NovelCard: React.FC<NovelCardProps> = ({ novel }) => {
 
   const getGenreColor = (genre: string) => {
     switch (genre) {
+      case 'Thriller':
+        return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      case 'Action':
+      case 'Spy & Agent':
+        return 'bg-orange-500/20 text-orange-300 border-orange-500/40';
       case 'Fantasy':
-        return 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800';
+        return 'bg-purple-500/20 text-purple-300 border-purple-500/40';
       case 'Romance':
-        return 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-800';
+        return 'bg-pink-500/20 text-pink-300 border-pink-500/40';
       case 'Mystery':
-        return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800';
+      case 'Crime':
+        return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
       case 'Sci-Fi':
-        return 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-800';
+      case 'Cyberpunk':
+        return 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
       default:
-        return 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800';
+        return 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40';
+    }
+  };
+
+  const getAgeRatingBadge = (rating?: string) => {
+    switch (rating) {
+      case '21+':
+        return 'bg-rose-600 text-white border-rose-500 font-black shadow-rose-900/50';
+      case '18+':
+        return 'bg-red-500 text-white border-red-400 font-bold';
+      case '16+':
+        return 'bg-amber-500 text-white border-amber-400 font-bold';
+      case '13+':
+        return 'bg-blue-500 text-white border-blue-400 font-bold';
+      default:
+        return 'bg-emerald-600 text-white border-emerald-500 font-bold';
     }
   };
 
@@ -48,9 +71,18 @@ export const NovelCard: React.FC<NovelCardProps> = ({ novel }) => {
         
         {/* Top Badges Overlay */}
         <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md border ${getGenreColor(novel.genre)} pointer-events-auto shadow-sm`}>
-            {novel.genre}
-          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {novel.ageRating && (
+              <span className={`px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] backdrop-blur-md border ${getAgeRatingBadge(novel.ageRating)} pointer-events-auto shadow-md flex items-center gap-1`}>
+                {novel.ageRating === '21+' && <ShieldAlert className="w-3 h-3 text-white fill-rose-600" />}
+                <span>{novel.ageRating}</span>
+              </span>
+            )}
+
+            <span className={`px-2.5 py-0.5 rounded-lg text-[11px] font-bold uppercase tracking-wider backdrop-blur-md border ${getGenreColor(novel.genre)} pointer-events-auto shadow-sm bg-slate-950/70`}>
+              {novel.genre}
+            </span>
+          </div>
 
           <button
             onClick={(e) => {
@@ -145,8 +177,16 @@ export const NovelCard: React.FC<NovelCardProps> = ({ novel }) => {
           </p>
         </div>
 
-        {/* Tags */}
+        {/* Multi-Genres & Tags */}
         <div className="flex flex-wrap gap-1 pt-1">
+          {(novel.genres || [novel.genre]).slice(0, 3).map((g, idx) => (
+            <span 
+              key={idx} 
+              className="text-[10px] px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-100 dark:border-indigo-900/40"
+            >
+              {g}
+            </span>
+          ))}
           {novel.tags.slice(0, 2).map((tag, idx) => (
             <span 
               key={idx} 

@@ -251,9 +251,16 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
               <div className="h-4 w-px bg-black/10 dark:bg-white/10 hidden sm:block" />
 
               <div className="min-w-0">
-                <p className="text-[11px] opacity-70 truncate max-w-[120px] sm:max-w-xs">
-                  {selectedNovel.title}
-                </p>
+                <div className="flex items-center gap-1.5">
+                  {selectedNovel.ageRating && (
+                    <span className="px-1.5 py-0.2 rounded bg-rose-600 text-white font-black text-[9px] uppercase tracking-wider">
+                      {selectedNovel.ageRating}
+                    </span>
+                  )}
+                  <p className="text-[11px] opacity-70 truncate max-w-[120px] sm:max-w-xs">
+                    {selectedNovel.title}
+                  </p>
+                </div>
                 <h4 className="font-bold text-xs sm:text-sm truncate max-w-[180px] sm:max-w-sm">
                   {selectedChapter.title}
                 </h4>
@@ -369,15 +376,31 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
       >
         {/* Chapter Title & Header */}
         <div className="text-center mb-10 pb-8 border-b border-black/10 dark:border-white/10 space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
-            {selectedNovel.title} • Bab {selectedChapter.chapterNumber} dari {selectedNovel.chapters.length}
-          </span>
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {selectedNovel.ageRating && (
+              <span className="px-2 py-0.5 rounded-lg bg-rose-600 text-white font-black text-[10px] uppercase tracking-wider">
+                Rating {selectedNovel.ageRating}
+              </span>
+            )}
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+              {selectedNovel.title} • Bab {selectedChapter.chapterNumber} dari {selectedNovel.chapters.length}
+            </span>
+          </div>
+
           <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black font-display tracking-tight leading-tight`}>
             {selectedChapter.title}
           </h1>
+
           <p className="text-xs opacity-70">
             Estimasi waktu membaca: ±{selectedChapter.readTimeMinutes} menit • {selectedChapter.content.split(/\s+/).length} kata
           </p>
+
+          {/* 21+ Advisory Note on Prologue & First Chapter */}
+          {selectedNovel.ageRating === '21+' && selectedChapter.chapterNumber <= 1 && (
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-[11px] font-medium">
+              <span>🔞 Cerita ini ditujukan untuk pembaca 21 tahun ke atas (unsur kekerasan, konspirasi & romansa dewasa).</span>
+            </div>
+          )}
         </div>
 
         {/* Paragraphs and Sentences with Interactive TTS & Highlights */}

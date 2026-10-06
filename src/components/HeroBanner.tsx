@@ -41,13 +41,25 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredNovel }) => {
               <Flame className="w-3.5 h-3.5 text-amber-400" />
               Pilihan Editor Minggu Ini
             </span>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              {featuredNovel.genre}
-            </span>
+
+            {/* Age Rating Badge */}
+            {featuredNovel.ageRating && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-600/90 text-white border border-rose-400 shadow-md shadow-rose-950/50">
+                <span className="w-2 h-2 rounded-full bg-white animate-ping mr-0.5" />
+                Rating {featuredNovel.ageRating} Dewasa
+              </span>
+            )}
+
+            {(featuredNovel.genres || [featuredNovel.genre]).map((g, idx) => (
+              <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-200 border border-indigo-500/30">
+                <Sparkles className="w-3 h-3 text-indigo-400" />
+                {g}
+              </span>
+            ))}
+
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">
               <Headphones className="w-3.5 h-3.5" />
-              Narasi Audio Web Speech
+              Narasi Audio & BGM
             </span>
           </div>
 

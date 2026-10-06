@@ -13,7 +13,8 @@ import {
   PlusCircle, 
   Calendar,
   MessageSquare,
-  Coffee
+  Coffee,
+  ShieldAlert
 } from 'lucide-react';
 import { AdSenseBanner } from './AdSenseBanner';
 import { SaweriaSupportCard } from './SaweriaSupportCard';
@@ -118,7 +119,12 @@ export const NovelDetailPage: React.FC = () => {
               alt={selectedNovel.title} 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute top-3 left-3">
+            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+              {selectedNovel.ageRating && (
+                <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-600 text-white backdrop-blur-md border border-rose-400 shadow-md">
+                  {selectedNovel.ageRating}
+                </span>
+              )}
               <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-900/80 text-white backdrop-blur-md">
                 {selectedNovel.genre}
               </span>
@@ -130,7 +136,14 @@ export const NovelDetailPage: React.FC = () => {
         <div className="flex-1 space-y-4">
           
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              {selectedNovel.ageRating && (
+                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-black border border-rose-500/30">
+                  <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                  <span>Rating Usia {selectedNovel.ageRating} Dewasa</span>
+                </span>
+              )}
+
               <span className="px-2.5 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-xs font-bold">
                 E-Book & Audiobook
               </span>
@@ -172,6 +185,21 @@ export const NovelDetailPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Multi-Genre Badges */}
+          <div className="space-y-1.5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Genre Cerita</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {(selectedNovel.genres || [selectedNovel.genre]).map((g, idx) => (
+                <span 
+                  key={idx}
+                  className="text-xs px-3 py-1 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200/60 dark:border-indigo-800/60"
+                >
+                  {g}
+                </span>
+              ))}
+            </div>
+          </div>
+
           {/* Synopsis */}
           <div className="space-y-1">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Sinopsis Cerita</h3>
@@ -179,6 +207,26 @@ export const NovelDetailPage: React.FC = () => {
               {selectedNovel.synopsis}
             </p>
           </div>
+
+          {/* Content Advisory Warnings (For 21+ and 18+) */}
+          {selectedNovel.contentWarnings && selectedNovel.contentWarnings.length > 0 && (
+            <div className="p-3.5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/40 space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800 dark:text-rose-300">
+                <ShieldAlert className="w-4 h-4 text-rose-600" />
+                <span>Peringatan Konten & Bimbingan Pembaca (21+):</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {selectedNovel.contentWarnings.map((warning, idx) => (
+                  <span 
+                    key={idx} 
+                    className="text-[11px] px-2.5 py-0.5 rounded-lg bg-rose-100/80 dark:bg-rose-900/50 text-rose-800 dark:text-rose-300 font-medium"
+                  >
+                    • {warning}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Tags */}
           <div className="flex flex-wrap gap-1.5 pt-1">
