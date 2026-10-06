@@ -8,13 +8,15 @@ import { BGMPlayerWidget } from './components/BGMPlayerWidget';
 import { AddNovelModal } from './components/AddNovelModal';
 import { LegalPagesModal } from './components/LegalPagesModal';
 import type { LegalPageTab } from './components/LegalPagesModal';
-import { Shield, FileText, Info, Mail } from 'lucide-react';
+import { SaweriaModal } from './components/SaweriaModal';
+import { Shield, FileText, Info, Mail, Coffee } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const { view } = useNovel();
   const [activeFilterTab, setActiveFilterTab] = useState<'all' | 'favorites' | 'history'>('all');
   const [isBGMDrawerOpen, setIsBGMDrawerOpen] = useState(false);
   const [isAddNovelOpen, setIsAddNovelOpen] = useState(false);
+  const [isSaweriaOpen, setIsSaweriaOpen] = useState(false);
   
   // Legal & AdSense compliance modal
   const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -33,6 +35,7 @@ const AppContent: React.FC = () => {
         <Navbar 
           onOpenAddNovel={() => setIsAddNovelOpen(true)}
           onOpenBGMDrawer={() => setIsBGMDrawerOpen(true)}
+          onOpenSaweria={() => setIsSaweriaOpen(true)}
           activeFilterTab={activeFilterTab}
           setActiveFilterTab={setActiveFilterTab}
         />
@@ -103,6 +106,13 @@ const AppContent: React.FC = () => {
                   <Mail className="w-3.5 h-3.5" />
                   <span>Kontak & Bantuan</span>
                 </button>
+                <button 
+                  onClick={() => setIsSaweriaOpen(true)}
+                  className="hover:underline flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold"
+                >
+                  <Coffee className="w-3.5 h-3.5" />
+                  <span>Traktir Penulis</span>
+                </button>
               </div>
             </div>
 
@@ -136,6 +146,12 @@ const AppContent: React.FC = () => {
         isOpen={legalModalOpen}
         onClose={() => setLegalModalOpen(false)}
         initialTab={legalModalTab}
+      />
+
+      <SaweriaModal 
+        isOpen={isSaweriaOpen} 
+        onClose={() => setIsSaweriaOpen(false)}
+        authorName="PamanKen"
       />
 
     </div>

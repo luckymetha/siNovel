@@ -14,7 +14,8 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Music, 
-  Copy
+  Copy,
+  Coffee
 } from 'lucide-react';
 import { TableOfContentsDrawer } from './TableOfContentsDrawer';
 import { ReaderSettingsDrawer } from './ReaderSettingsDrawer';
@@ -22,6 +23,8 @@ import { BookmarksDrawer } from './BookmarksDrawer';
 import { HighlightsDrawer } from './HighlightsDrawer';
 import { AudioNarrationBar } from './AudioNarrationBar';
 import { AdSenseBanner } from '../AdSenseBanner';
+import { SaweriaSupportCard } from '../SaweriaSupportCard';
+import { SaweriaModal } from '../SaweriaModal';
 
 interface ReaderViewProps {
   onOpenBGMDrawer: () => void;
@@ -51,6 +54,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [showHighlights, setShowHighlights] = useState(false);
+  const [showSaweriaModal, setShowSaweriaModal] = useState(false);
   const [isZenMode, setIsZenMode] = useState(false);
 
   // Selection Popover State
@@ -289,6 +293,16 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
                 <span className="hidden md:inline">Kutipan</span>
               </button>
 
+              {/* Traktir Kopi Saweria Button */}
+              <button
+                onClick={() => setShowSaweriaModal(true)}
+                className="p-2 rounded-xl transition-colors flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200/60 dark:border-amber-800/60"
+                title="Dukung Penulis di Saweria"
+              >
+                <Coffee className="w-4 h-4 text-amber-500" />
+                <span className="hidden sm:inline">Traktir Kopi</span>
+              </button>
+
               {/* BGM Toggle in Reader Header */}
               <button
                 onClick={onOpenBGMDrawer}
@@ -440,6 +454,12 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
 
         {/* In-Article Reading AdSense Banner */}
         <AdSenseBanner slotId="3001" format="horizontal" label="Iklan Sponsor AdSense (Akhir Bab)" />
+
+        {/* Reader Tip / Saweria Support Card for PamanKen */}
+        <SaweriaSupportCard 
+          authorName={selectedNovel.author}
+          onOpenModal={() => setShowSaweriaModal(true)} 
+        />
 
         {/* Chapter Bottom Navigation Buttons */}
         <div className="mt-8 pt-8 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -601,6 +621,13 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ onOpenBGMDrawer }) => {
       <HighlightsDrawer 
         isOpen={showHighlights} 
         onClose={() => setShowHighlights(false)} 
+      />
+
+      {/* Saweria Tip Modal */}
+      <SaweriaModal 
+        isOpen={showSaweriaModal} 
+        onClose={() => setShowSaweriaModal(false)}
+        authorName={selectedNovel.author}
       />
     </div>
   );

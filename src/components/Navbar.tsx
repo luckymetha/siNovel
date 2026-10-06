@@ -19,6 +19,7 @@ import type { ThemeMode } from '../types';
 interface NavbarProps {
   onOpenAddNovel: () => void;
   onOpenBGMDrawer: () => void;
+  onOpenSaweria?: () => void;
   activeFilterTab: 'all' | 'favorites' | 'history';
   setActiveFilterTab: (tab: 'all' | 'favorites' | 'history') => void;
 }
@@ -26,6 +27,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ 
   onOpenAddNovel, 
   onOpenBGMDrawer,
+  onOpenSaweria,
   activeFilterTab,
   setActiveFilterTab
 }) => {
@@ -212,6 +214,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               )}
             </div>
+
+            {/* Saweria Tip Button */}
+            {onOpenSaweria && (
+              <button
+                onClick={onOpenSaweria}
+                title="Traktir Kopi untuk PamanKen di Saweria"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/70 text-xs font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Coffee className="w-3.5 h-3.5 text-amber-500" />
+                <span>Traktir Kopi</span>
+              </button>
+            )}
 
             {/* Add Novel Button */}
             <button

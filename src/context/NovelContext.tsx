@@ -114,9 +114,27 @@ export const NovelProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       try { 
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const existingIds = new Set(parsed.map((n: Novel) => n.id));
+          // Sync any initial novels with current author and chapter updates
+          const updatedParsed = parsed.map((n: Novel) => {
+            const initialMatch = INITIAL_NOVELS.find(init => init.id === n.id);
+            if (initialMatch) {
+              return {
+                ...n,
+                author: initialMatch.author,
+                title: initialMatch.title,
+                synopsis: initialMatch.synopsis,
+                genre: initialMatch.genre,
+                tags: initialMatch.tags,
+                chapters: initialMatch.chapters,
+                totalWords: initialMatch.totalWords,
+                rating: initialMatch.rating
+              };
+            }
+            return n;
+          });
+          const existingIds = new Set(updatedParsed.map((n: Novel) => n.id));
           const missingInitial = INITIAL_NOVELS.filter(n => !existingIds.has(n.id));
-          return [...missingInitial, ...parsed];
+          return [...missingInitial, ...updatedParsed];
         }
       } catch { /* ignore */ }
     }

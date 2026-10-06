@@ -12,9 +12,12 @@ import {
   Share2, 
   PlusCircle, 
   Calendar,
-  MessageSquare
+  MessageSquare,
+  Coffee
 } from 'lucide-react';
 import { AdSenseBanner } from './AdSenseBanner';
+import { SaweriaSupportCard } from './SaweriaSupportCard';
+import { SaweriaModal } from './SaweriaModal';
 
 export const NovelDetailPage: React.FC = () => {
   const { 
@@ -26,6 +29,7 @@ export const NovelDetailPage: React.FC = () => {
   } = useNovel();
 
   const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+  const [showSaweriaModal, setShowSaweriaModal] = useState(false);
   const [newChapterTitle, setNewChapterTitle] = useState('');
   const [newChapterContent, setNewChapterContent] = useState('');
   const [activeTab, setActiveTab] = useState<'chapters' | 'reviews'>('chapters');
@@ -209,6 +213,14 @@ export const NovelDetailPage: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setShowSaweriaModal(true)}
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 font-semibold text-sm border border-amber-200/80 dark:border-amber-800/80 transition-colors"
+            >
+              <Coffee className="w-4 h-4 text-amber-500" />
+              <span>Traktir Kopi Penulis</span>
+            </button>
+
+            <button
               onClick={() => setShowAddChapterModal(true)}
               className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-colors"
             >
@@ -220,6 +232,12 @@ export const NovelDetailPage: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Saweria Author Support Banner */}
+      <SaweriaSupportCard 
+        authorName={selectedNovel.author}
+        onOpenModal={() => setShowSaweriaModal(true)}
+      />
 
       {/* Chapters & Reviews Navigation Tabs */}
       <div className="space-y-4">
@@ -424,6 +442,12 @@ export const NovelDetailPage: React.FC = () => {
         </div>
       )}
 
+      {/* Saweria Modal */}
+      <SaweriaModal 
+        isOpen={showSaweriaModal} 
+        onClose={() => setShowSaweriaModal(false)}
+        authorName={selectedNovel.author}
+      />
     </div>
   );
 };
