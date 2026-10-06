@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.4);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.7);
+  }
+}
+
+/* Custom theme classes */
+.theme-light {
+  background-color: #FFFFFF;
+  color: #1E293B;
+}
+
+.theme-dark {
+  background-color: #0F172A;
+  color: #E2E8F0;
+}
+
+.theme-sepia {
+  background-color: #FBF0D9;
+  color: #5F4B32;
+}
+
+.theme-deep-night {
+  background-color: #060913;
+  color: #CBD5E1;
+}
+
+.theme-forest {
+  background-color: #0E1F1A;
+  color: #D1E7DD;
+}
+
+.theme-lavender {
+  background-color: #F6F3FF;
+  color: #372B56;
+}
+
+/* TTS sentence highlight styling */
+.tts-active-sentence {
+  background: linear-gradient(120deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
+  border-radius: 4px;
+  padding: 2px 4px;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-dark .tts-active-sentence,
+.theme-deep-night .tts-active-sentence {
+  background: linear-gradient(120deg, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.4) 100%);
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.6), 0 0 16px rgba(99, 102, 241, 0.3);
+}
+
+.theme-sepia .tts-active-sentence {
+  background: #E5C384;
+  color: #382709;
+  box-shadow: 0 0 0 2px #C9A050;
+}
+
+/* Smooth range slider styling */
+input[type="range"] {
+  accent-color: #6366F1;
+}
