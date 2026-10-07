@@ -12,7 +12,7 @@ interface AdSenseBannerProps {
 
 export const AdSenseBanner: React.FC<AdSenseBannerProps> = ({
   slotId = '1234567890',
-  adClient = 'ca-pub-XXXXXXXXXXXXXXXX',
+  adClient = 'ca-pub-9677228569710863',
   format = 'auto',
   layoutKey,
   className = '',
