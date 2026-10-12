@@ -10,7 +10,7 @@ interface SaweriaSupportCardProps {
 
 export const SaweriaSupportCard: React.FC<SaweriaSupportCardProps> = ({
   authorName = 'PamanKen',
-  saweriaUrl = 'https://saweria.co/PamanKen',
+  saweriaUrl = 'https://saweria.co/luckymetha',
   onOpenModal,
   className = ''
 }) => {

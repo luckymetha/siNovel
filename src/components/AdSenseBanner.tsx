@@ -32,7 +32,7 @@ export const AdSenseBanner: React.FC<AdSenseBannerProps> = ({
         const adsbygoogle = (window as any).adsbygoogle || [];
         adsbygoogle.push({});
         isLoadedRef.current = true;
-      } catch (err) {
+      } catch (err) { 
         console.debug('AdSense push error:', err);
       }
     }

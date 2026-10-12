@@ -248,7 +248,7 @@ export const AddNovelModal: React.FC<AddNovelModalProps> = ({ isOpen, onClose })
           {/* Age Rating & Tags */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
                 <span>Rating Usia Pembaca *</span>
               </label>

@@ -12,7 +12,7 @@ export const SaweriaModal: React.FC<SaweriaModalProps> = ({
   isOpen,
   onClose,
   authorName = 'PamanKen',
-  saweriaUrl = 'https://saweria.co/PamanKen'
+  saweriaUrl = 'https://saweria.co/luckymetha'
 }) => {
   const [copied, setCopied] = useState(false);
 
