@@ -341,7 +341,7 @@ export const NovelDetailPage: React.FC = () => {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
-                      Bab {chapter.chapterNumber}
+                      {chapter.chapterNumber === 0 ? 'Prolog' : `Bab ${chapter.chapterNumber}`}
                     </span>
                     <span className="text-xs text-slate-400 flex items-center gap-1">
                       <Clock className="w-3 h-3" />

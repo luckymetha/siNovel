@@ -114,34 +114,30 @@ export const NovelProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       try { 
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Sync any initial novels with current author, genres, ageRating, and chapter updates
-          const updatedParsed = parsed.map((n: Novel) => {
-            const initialMatch = INITIAL_NOVELS.find(init => init.id === n.id);
-            if (initialMatch) {
+          // Sync initial novels preserving canonical order and keeping user reading states
+          const initialMap = new Map(INITIAL_NOVELS.map(n => [n.id, n]));
+          const syncedInitials = INITIAL_NOVELS.map(init => {
+            const savedMatch = parsed.find((n: Novel) => n.id === init.id);
+            if (savedMatch) {
               return {
-                ...n,
-                author: initialMatch.author,
-                title: initialMatch.title,
-                synopsis: initialMatch.synopsis,
-                genre: initialMatch.genre,
-                genres: initialMatch.genres || [initialMatch.genre],
-                ageRating: initialMatch.ageRating || '21+',
-                contentWarnings: initialMatch.contentWarnings,
-                tags: initialMatch.tags,
-                chapters: initialMatch.chapters,
-                totalWords: initialMatch.totalWords,
-                rating: initialMatch.rating
+                ...init,
+                isFavorite: savedMatch.isFavorite,
+                lastReadChapterId: savedMatch.lastReadChapterId,
+                lastReadProgress: savedMatch.lastReadProgress,
+                lastReadTimestamp: savedMatch.lastReadTimestamp,
               };
             }
-            return {
+            return init;
+          });
+          // Include any custom novels created by the user not in INITIAL_NOVELS
+          const customUserNovels = parsed
+            .filter((n: Novel) => !initialMap.has(n.id))
+            .map((n: Novel) => ({
               ...n,
               genres: n.genres || [n.genre],
               ageRating: n.ageRating || 'Semua Umur'
-            };
-          });
-          const existingIds = new Set(updatedParsed.map((n: Novel) => n.id));
-          const missingInitial = INITIAL_NOVELS.filter(n => !existingIds.has(n.id));
-          return [...missingInitial, ...updatedParsed];
+            }));
+          return [...syncedInitials, ...customUserNovels];
         }
       } catch { /* ignore */ }
     }

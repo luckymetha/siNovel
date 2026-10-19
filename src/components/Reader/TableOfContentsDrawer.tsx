@@ -69,7 +69,7 @@ export const TableOfContentsDrawer: React.FC<TableOfContentsDrawerProps> = ({ is
                           ? 'bg-white/20 text-white' 
                           : 'bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400'
                       }`}>
-                        Bab {chapter.chapterNumber}
+                        {chapter.chapterNumber === 0 ? 'Prolog' : `Bab ${chapter.chapterNumber}`}
                       </span>
                       <span className={`text-[11px] flex items-center gap-1 ${
                         isCurrent ? 'text-indigo-100' : 'text-slate-400'
